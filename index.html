@@ -24,7 +24,7 @@
             <nav class="main-nav">
                 <a href="#shows">SHOWS</a>
                 <a href="#artists">ARTISTS</a>
-                <a href="#about">ABOUT</a>
+                <a href="#about">ABOUT NBJ</a>
                 <a href="#contact">CONTACT</a>
             </nav>
         </div>
@@ -102,5 +102,24 @@
         </div>
     </footer>
 
+    <script>
+        const video = document.getElementById('background-video');
+
+        function attemptPlay() {
+            if (video.paused) {
+                // Attempt to play and handle potential errors (like browser blocking)
+                video.play().catch(error => {
+                    // Fail silently, as the browser will still await a user interaction
+                });
+            }
+        }
+
+        // 1. Try playing immediately (works if muted)
+        attemptPlay(); 
+
+        // 2. Attach listeners for the first user interaction (click or tap)
+        document.addEventListener('touchstart', attemptPlay, { once: true });
+        document.addEventListener('click', attemptPlay, { once: true });
+    </script>
 </body>
 </html>
