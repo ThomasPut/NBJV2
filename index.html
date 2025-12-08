@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="style.css"> 
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -17,15 +17,24 @@
             Your browser does not support the video tag.
         </video>
 
+        <button class="menu-toggle" aria-controls="nav-menu" aria-expanded="false">
+            <div class="icon-bar"></div>
+            <div class="icon-bar"></div>
+            <div class="icon-bar"></div>
+        </button>
+        
+        <nav class="main-nav" id="nav-menu">
+            <a href="#shows">SHOWS</a>
+            <a href="#artists">ARTISTS</a>
+            <a href="listen.html" class="listen-mobile-only">Listen Now</a>
+            <a href="#about">ABOUT</a>
+            <a href="#contact">CONTACT</a> 
+        </nav>
+        
         <div class="hero-content">
             <h1 class="nbj-title">NOTHING BUT JAZZ</h1> 
-            <nav class="main-nav">
-                <a href="#shows">SHOWS</a>
-                <a href="#artists">ARTISTS</a>
-                <a href="#about">ABOUT</a>
-                <a href="#contact">CONTACT</a>
-            </nav>
-            <a href="#" class="main-cta header-cta">LISTEN NOW</a>
+            
+            <a href="listen.html" class="main-cta header-cta">LISTEN NOW</a>
         </div>
     </header>
 
@@ -35,16 +44,25 @@
             <div class="show-list" id="monthly-shows">
                 </div>
         </section>
+        
+        <hr class="section-divider">
+
         <section id="artists" class="section-container">
             <h2 class="section-title">THE ICE GONZALEZ QUINTET</h2>
             <div class="artist-content-split">
                 <div class="artist-card artist-ice"> 
                     <div class="artist-name-overlay">
-                        <h3>ISSCE GONZALEZ</h3>
+                        <h3>ICE GONZALEZ</h3> 
                     </div>
                 </div>
             </div>
-            </section>
+            
+            <div class="artist-bio-text">
+                <p>The new face of jazz, Los Angeles based trumpeter, Ice Gonzalez blends the past, present, and future. Mastery is the objective, and honoring the greats before him, while also honing the new sounds of the 21st century.</p>
+            </div>
+        </section>
+
+        <hr class="section-divider"> 
 
         <section id="about" class="section-container">
             <div class="about-contact-grid">
@@ -74,34 +92,61 @@
     <script>
         // VIDEO AUTOPLAY FIX (Mobile)
         const video = document.getElementById('background-video');
-
         function attemptPlay() {
-            if (video.paused) {
-                video.play().catch(error => {});
-            }
+            if (video.paused) { video.play().catch(error => {}); }
         }
         attemptPlay(); 
         document.addEventListener('touchstart', attemptPlay, { once: true });
         document.addEventListener('click', attemptPlay, { once: true });
         
-        // --- Smooth Scrolling for Standard Anchors ---
+        // JAVASCRIPT FOR MOBILE MENU TOGGLE 
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+
+        menuToggle.addEventListener('click', () => {
+            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true' || false;
+            menuToggle.setAttribute('aria-expanded', !isExpanded);
+            navMenu.classList.toggle('active');
+            menuToggle.classList.toggle('open'); 
+        });
+
+
+        // --- Smooth Scrolling & Menu Closing (Unified Logic) ---
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault();
+                const href = this.getAttribute('href');
 
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                if (href.startsWith('#') && href !== '#') {
+                    // Prevent default anchor jump
+                    e.preventDefault(); 
+                    
+                    // Check if the mobile menu is active/open
+                    if (navMenu.classList.contains('active')) {
+                        // 1. If mobile menu is open, close it first
+                        navMenu.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        menuToggle.classList.remove('open'); 
+                        
+                        // 2. Add a small delay for smooth menu closing before scrolling
+                        setTimeout(() => {
+                             document.querySelector(href).scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }, 50);
+                    } else {
+                        // **CRITICAL DESKTOP FIX:** If mobile menu is closed, scroll immediately
+                        document.querySelector(href).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                }
             });
         });
 
-        // DYNAMIC SHOW DATE GENERATOR (Now removes past shows)
+        // DYNAMIC SHOW DATE GENERATOR (unaltered)
         function populateMonthlyShows() {
             const list = document.getElementById('monthly-shows');
-            
-            // Venue Hyperlink
             const venueLink = `<a href="https://adktla.com/" target="_blank" rel="noopener noreferrer">ADKT</a>`;
-            
             const showTemplate = (dayName, dateNumber, monthName, headliner, venue) => `
                 <article class="show-item">
                     <span class="show-date">${dayName}. ${monthName} ${dateNumber}</span>
@@ -111,9 +156,7 @@
             `;
             
             const today = new Date();
-            // Set today's time to midnight so that any show today is still included
             today.setHours(0, 0, 0, 0); 
-            
             const now = new Date();
             const year = now.getFullYear();
             const month = now.getMonth();
@@ -122,12 +165,10 @@
             const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
             const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
-            // Find all Thursdays (day index 4) in the current month
             for (let i = 1; i <= daysInMonth; i++) {
                 const date = new Date(year, month, i);
-                date.setHours(0, 0, 0, 0); // Normalize time for comparison
+                date.setHours(0, 0, 0, 0); 
 
-                // We want THURSDAYS (day index 4) AND the date must be today or in the future
                 if (date.getDay() === 4 && date >= today) { 
                     datesArray.push({
                         day: dayNames[date.getDay()],
@@ -139,11 +180,9 @@
                 }
             }
             
-            // --- Custom Show (New Year's Eve) ---
-            const nyeDate = new Date(year, 11, 31); // Month 11 is December
+            const nyeDate = new Date(year, 11, 31);
             nyeDate.setHours(0, 0, 0, 0);
 
-            // Add the New Year's Eve show only if it is in the future
             if (nyeDate >= today) {
                 datesArray.push({
                     day: 'FRI',
@@ -154,21 +193,17 @@
                 });
             }
             
-            // Clear existing content
             list.innerHTML = ''; 
 
-            // Populate list with dynamic shows
             if (datesArray.length === 0) {
-                 list.innerHTML = '<p style="text-align: center; font-style: italic; opacity: 0.7;">No upcoming shows this month. Check back soon!</p>';
+                   list.innerHTML = '<p style="text-align: center; font-style: italic; opacity: 0.7;">No upcoming shows this month. Check back soon!</p>';
             } else {
-                 datesArray.forEach(show => {
-                     list.innerHTML += showTemplate(show.day, show.dateNum, show.month, show.headliner, show.venue);
-                 });
+                   datesArray.forEach(show => {
+                       list.innerHTML += showTemplate(show.day, show.dateNum, show.month, show.headliner, show.venue);
+                   });
             }
         }
-
         populateMonthlyShows();
-
     </script>
 </body>
 </html>
