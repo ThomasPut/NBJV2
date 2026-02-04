@@ -35,57 +35,55 @@
     <main>
         
        <section id="featured-video" class="section-container">
-    <h2 class="section-title">FEATURED PERFORMANCE</h2>
+            <h2 class="section-title">FEATURED PERFORMANCE</h2>
 
-    <div class="video-container">
-        <video controls preload="metadata">
-            <source src="issce3.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
+            <div class="video-container">
+                <video controls preload="metadata" poster="issce3.png">
+                    <source src="issce3.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
 
-    <p class="video-caption">ADKT, Los Angeles residency 2026</p>
-</section>
-
+            <p class="video-caption">ADKT, Los Angeles residency 2026</p>
+        </section>
 
         <hr class="section-divider">
 
-      <section id="additional-videos" class="section-container">
-    <h2 class="section-title">MORE VIDEOS</h2>
+        <section id="additional-videos" class="section-container">
+            <h2 class="section-title">MORE VIDEOS</h2>
 
-    <div class="video-grid-embeds">
+            <div class="video-grid-embeds">
 
-        <div class="video-embed-item">
-            <h3 class="video-title">Yamashiro, Los Angeles, 2025</h3>
-            <div class="video-container-small">
-                <video controls preload="metadata">
-                    <source src="issce1.mp4" type="video/mp4">
-                </video>
+                <div class="video-embed-item">
+                    <h3 class="video-title">Yamashiro, Los Angeles, 2025</h3>
+                    <div class="video-container-small">
+                        <video controls preload="metadata" poster="issce1.png">
+                            <source src="issce1.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+
+                <div class="video-embed-item">
+                    <h3 class="video-title">1212 Santa Monica, 2022</h3>
+                    <div class="video-container-small">
+                        <video controls preload="metadata" poster="issce2.png">
+                            <source src="issce2.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+
+                <div class="video-embed-item">
+                    <h3 class="video-title">Sunset Room, Hollywood, 2024</h3>
+                    <div class="video-container-small">
+                        <video controls preload="metadata" poster="issce4.png">
+                            <source src="issce4.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+
             </div>
-        </div>
+        </section>
 
-        <div class="video-embed-item">
-            <h3 class="video-title">1212 Santa Monica, 2022</h3>
-            <div class="video-container-small">
-                <video controls preload="metadata">
-                    <source src="issce2.mp4" type="video/mp4">
-                </video>
-            </div>
-        </div>
-
-        <div class="video-embed-item">
-            <h3 class="video-title">Sunset Room, Hollywood, 2024</h3>
-            <div class="video-container-small">
-                <video controls preload="metadata">
-                    <source src="issce4.mp4" type="video/mp4">
-                </video>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-        
     </main>
 
     <footer>
@@ -114,19 +112,16 @@
                         e.preventDefault();
                         
                         if (navMenu.classList.contains('active')) {
-                            // Close menu first
                             navMenu.classList.remove('active');
                             menuToggle.setAttribute('aria-expanded', 'false');
                             menuToggle.classList.remove('open'); 
                             
-                            // Scroll after a small delay
                             setTimeout(() => {
                                 document.querySelector(href).scrollIntoView({
                                     behavior: 'smooth'
                                 });
                             }, 50);
                         } else {
-                            // Scroll immediately
                             document.querySelector(href).scrollIntoView({
                                 behavior: 'smooth'
                             });
