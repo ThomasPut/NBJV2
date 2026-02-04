@@ -4,15 +4,262 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listen Now | Nothing But Jazz</title>
-    <link rel="stylesheet" href="style.css"> 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900;900&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Global Styles & Variables --- */
+        :root {
+            --color-dark: #0A0A0A;
+            --color-light: #F5F5DC;
+            --color-accent: #FFC000;
+            --font-primary: 'Montserrat', sans-serif;
+            --spacing-large: 80px;
+        }
+
+        /* Base Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--color-dark);
+            color: var(--color-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: var(--color-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover { color: var(--color-accent); }
+
+        /* --- HERO SECTION --- */
+        #listen-hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #background-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.35;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            text-align: center;
+            width: 90%;
+        }
+
+        .nbj-title {
+            font-size: clamp(3rem, 6vw, 7rem);
+            font-weight: 900;
+            letter-spacing: clamp(5px, 1.5vw, 15px);
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        /* --- BUTTON STYLE (Matches Home Page) --- */
+        .main-cta {
+            display: inline-block;
+            padding: 12px 30px;
+            border: 2px solid var(--color-accent);
+            background-color: transparent;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .main-cta:hover {
+            background-color: var(--color-accent);
+            color: var(--color-dark);
+            box-shadow: 0 0 15px rgba(255, 192, 0, 0.6); 
+        }
+
+        /* --- NAVIGATION --- */
+        .main-nav {
+            position: absolute;
+            top: 60%; /* Pushed down to clear title/button */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 25px;
+            z-index: 15;
+        }
+
+        .main-nav a {
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            padding: 5px 10px;
+        }
+
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-accent);
+            transition: all 0.3s ease;
+        }
+
+        .main-nav a:hover::after { width: 100%; left: 0; }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 30px;
+            right: 5%;
+            z-index: 2000;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .icon-bar { width: 100%; height: 3px; background-color: var(--color-accent); transition: 0.3s; }
+
+        /* --- SECTIONS --- */
+        .section-container {
+            padding: var(--spacing-large) 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 60px;
+            color: var(--color-accent);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        .section-divider {
+            border: none;
+            height: 1px;
+            max-width: 800px;
+            margin: 20px auto;
+            background: linear-gradient(to right, rgba(255,192,0,0), var(--color-accent), rgba(255,192,0,0));
+            opacity: 0.4;
+        }
+
+        /* --- VIDEO CONTAINERS --- */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            padding-bottom: 56.25%;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255, 192, 0, 0.4);
+        }
+
+        .video-grid-embeds {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .video-container-small {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(255, 192, 0, 0.3);
+            border: 1px solid var(--color-accent);
+        }
+
+        .video-container video, .video-container-small video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-caption {
+            display: block;
+            text-align: center;
+            font-style: italic;
+            opacity: 0.7;
+            margin-top: 15px;
+            margin-bottom: 50px;
+            width: 100%;
+        }
+
+        footer {
+            padding: 40px 5%;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- MOBILE FIXES --- */
+        @media (max-width: 900px) {
+            .menu-toggle { display: flex; }
+            .menu-toggle.open .icon-bar:nth-child(1) { transform: rotate(45deg) translate(5px, 9px); }
+            .menu-toggle.open .icon-bar:nth-child(2) { opacity: 0; }
+            .menu-toggle.open .icon-bar:nth-child(3) { transform: rotate(-45deg) translate(5px, -9px); }
+
+            .main-nav { display: none; }
+            .main-nav.active {
+                display: flex !important; 
+                position: fixed !important; 
+                inset: 0 !important;
+                flex-direction: column; 
+                justify-content: center; 
+                align-items: center;
+                background: rgba(10, 10, 10, 0.98); 
+                z-index: 1500; 
+                height: 100vh !important;
+                width: 100vw !important;
+                /* RECTIFYING THE "LEFT" SHIFT */
+                left: 0 !important;
+                transform: none !important;
+            }
+            .main-nav a { font-size: 2rem; padding: 15px; }
+
+            .section-title { font-size: 2rem; margin-bottom: 30px; }
+            .video-grid-embeds { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
     <header id="listen-hero-section">
         <video autoplay muted loop playsinline id="background-video"> 
             <source src="MicrosoftTeams-video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
         </video>
 
         <button class="menu-toggle" aria-controls="nav-menu" aria-expanded="false">
@@ -29,21 +276,18 @@
 
         <div class="hero-content">
             <h1 class="nbj-title listen-title">LISTEN NOW</h1>
+            <a href="index.html" class="main-cta">HOME Page</a>
         </div>
     </header>
 
     <main>
-        
-       <section id="featured-video" class="section-container">
+        <section id="featured-video" class="section-container">
             <h2 class="section-title">FEATURED PERFORMANCE</h2>
-
             <div class="video-container">
                 <video controls preload="metadata" poster="issce3.png">
                     <source src="issce3.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
                 </video>
             </div>
-
             <p class="video-caption">ADKT, Los Angeles residency 2026</p>
         </section>
 
@@ -51,9 +295,7 @@
 
         <section id="additional-videos" class="section-container">
             <h2 class="section-title">MORE VIDEOS</h2>
-
             <div class="video-grid-embeds">
-
                 <div class="video-embed-item">
                     <h3 class="video-title">Yamashiro, Los Angeles, 2025</h3>
                     <div class="video-container-small">
@@ -80,10 +322,8 @@
                         </video>
                     </div>
                 </div>
-
             </div>
         </section>
-
     </main>
 
     <footer>
@@ -95,7 +335,6 @@
             const menuToggle = document.querySelector('.menu-toggle');
             const navMenu = document.getElementById('nav-menu');
             
-            // Toggle Logic
             menuToggle.addEventListener('click', () => {
                 const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true' || false;
                 menuToggle.setAttribute('aria-expanded', !isExpanded);
@@ -103,29 +342,16 @@
                 menuToggle.classList.toggle('open'); 
             });
             
-            // Smooth Scrolling & Menu Closing
-            document.querySelectorAll('a[href^="#"], a[href^="index.html#"]').forEach(anchor => {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     const href = this.getAttribute('href');
-                    
-                    if (href.startsWith('#') && href !== '#') {
+                    if (href !== '#') {
                         e.preventDefault();
-                        
                         if (navMenu.classList.contains('active')) {
                             navMenu.classList.remove('active');
-                            menuToggle.setAttribute('aria-expanded', 'false');
                             menuToggle.classList.remove('open'); 
-                            
-                            setTimeout(() => {
-                                document.querySelector(href).scrollIntoView({
-                                    behavior: 'smooth'
-                                });
-                            }, 50);
-                        } else {
-                            document.querySelector(href).scrollIntoView({
-                                behavior: 'smooth'
-                            });
                         }
+                        document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
                     }
                 });
             });
